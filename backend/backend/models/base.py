@@ -21,7 +21,6 @@ class UTCDateTime(TypeDecorator):
         return value.astimezone(timezone.utc)
 
 
-
 class Base(DeclarativeBase):
     type_annotation_map={datetime: UTCDateTime}
 

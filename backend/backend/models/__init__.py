@@ -1,7 +1,7 @@
 from backend.models.booking import Booking
 from backend.models.master import Master
 from backend.models.refresh_token import RefreshToken
-from backend.models.services import Service
+from backend.models.services import Service, master_service
 from backend.models.user import User
 
 from backend.models.base import Base
@@ -16,7 +16,8 @@ __all__ = [
     "WorkingHours",
     "TimeOff",
     "Master",
-    "Booking"
+    "Booking",
+    "master_service"
 
 ]
 
