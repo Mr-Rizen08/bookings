@@ -2,7 +2,7 @@ from datetime import timezone, datetime
 from sqlalchemy import TypeDecorator, DateTime
 from sqlalchemy.orm import DeclarativeBase
 
-class UTCDateTime(TypeDecorator):
+class UTCDateTime(TypeDecorator): #кастомный тип данных
     impl = DateTime(timezone=True)
     cache_ok = True
 

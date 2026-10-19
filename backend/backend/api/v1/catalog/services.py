@@ -2,8 +2,8 @@ from uuid import UUID
 
 from fastapi import APIRouter
 from starlette import status
-
-from models import Service
+from dependencies.db import SessionDep
+from dependencies.services import ServiceServiceDep
 from schemas.services import ServiceRead
 
 router = APIRouter(
@@ -17,8 +17,13 @@ router = APIRouter(
     response_model=list[ServiceRead],
     status_code=status.HTTP_200_OK,
 )
-async def get_services():
-    ...
+async def get_services(
+        session: ServiceServiceDep
+):
+    response = await session.get_services()
+    return response
+
+
 
 
 @router.get(
@@ -27,7 +32,12 @@ async def get_services():
     response_model=ServiceRead,
     status_code=status.HTTP_200_OK
 )
-async def get_service(service_id: UUID):
-    ...
+async def get_service(
+        service_id: UUID,
+        service: ServiceServiceDep
+):
+    response = await service.get_service_by_id(service_id)
+    return response
+
 
 
