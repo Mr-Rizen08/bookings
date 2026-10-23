@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter
 from starlette import status
 
+from dependencies.masters import MasterServiceDep
 from models import Master
 from schemas.masters import MasterRead
 
@@ -18,10 +19,11 @@ router = APIRouter(
     response_model=list[MasterRead],
     status_code=status.HTTP_200_OK,
 )
-async def get_masters():
-    ...
-
-
+async def get_masters(
+        session: MasterServiceDep
+):
+    response = await session.get_masters()
+    return response
 
 
 @router.get(
@@ -42,6 +44,11 @@ async def get_slots(master_id: UUID):
     response_model=MasterRead,
     status_code=status.HTTP_200_OK,
 )
-async def get_master(master_id: UUID):
-    ...
+async def get_master(
+        master_id: UUID,
+        session: MasterServiceDep
+):
+    response = await session.get_master_by_id(master_id)
+    return response
+
 

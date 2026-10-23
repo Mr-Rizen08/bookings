@@ -7,7 +7,7 @@ from repository.base import BaseRepository
 
 
 class ServiceRepository(BaseRepository):
-    async def get(self, service: Service) -> None:
+    async def create(self, service: Service) -> None:
         self.session.add(service)
         await self.session.flush()
 
