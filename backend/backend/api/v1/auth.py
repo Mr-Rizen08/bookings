@@ -1,6 +1,8 @@
 from fastapi import APIRouter
 from starlette import status
 
+from schemas.auth import RegisterUser
+
 router = APIRouter(
     prefix="/auth",
     tags=["Auth"],
@@ -11,7 +13,19 @@ router = APIRouter(
     summary="Вход в уч запись",
     status_code=status.HTTP_201_CREATED,
 )
-async def register():
+async def register(
+        body: RegisterUser
+):
+    pass
+
+@router.post(
+    "/register",
+    summary="Регистрация",
+    status_code=status.HTTP_201_CREATED,
+)
+async def register(
+        body: RegisterUser
+):
     pass
 
 
