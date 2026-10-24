@@ -2,8 +2,8 @@ from uuid import UUID
 
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import Service
-from repository.service import ServiceRepository
+from backend.models import Service
+from backend.repository.service import ServiceRepository
 
 
 class ServiceService:

@@ -1,8 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field, field_validator
 import phonenumbers as pn
 from phonenumbers.phonenumberutil import NumberParseException
-
-from core.secutiry import password_schema
+from backend.core.secutiry import password_schema
 
 
 class RegisterUser(BaseModel):
@@ -41,4 +40,10 @@ class LoginUser(BaseModel):
             raise ValueError("Invalid password")
         return v
 
+class TokenResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = 'bearer'
 
+class TokenSchema(BaseModel):
+    refresh_token: str

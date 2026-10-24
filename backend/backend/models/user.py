@@ -2,7 +2,7 @@ from enum import Enum
 
 from datetime import datetime
 
-from sqlalchemy import String, BigInteger, Boolean, func
+from sqlalchemy import String, BigInteger, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.models.base import Base

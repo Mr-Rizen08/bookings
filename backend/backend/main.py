@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from api import v1_router
+from backend.api import v1_router
 
 app = FastAPI(
     title="Booking API",

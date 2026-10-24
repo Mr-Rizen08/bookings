@@ -3,8 +3,8 @@ from uuid import UUID
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import Master
-from repository.masters import MasterRepository
+from backend.models import Master
+from backend.repository.masters import MasterRepository
 
 class MasterService:
     def __init__(

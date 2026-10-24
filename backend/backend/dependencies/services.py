@@ -1,8 +1,8 @@
 from typing import Annotated
 from fastapi import Depends
-from dependencies.db import SessionDep
-from repository.service import ServiceRepository
-from services.service import ServiceService
+from backend.dependencies.db import SessionDep
+from backend.repository.service import ServiceRepository
+from backend.services.service import ServiceService
 
 
 #Session -> ServiceRepository

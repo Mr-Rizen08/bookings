@@ -2,9 +2,8 @@ from uuid import UUID
 
 from fastapi import APIRouter
 from starlette import status
-from dependencies.db import SessionDep
-from dependencies.services import ServiceServiceDep
-from schemas.services import ServiceRead
+from backend.dependencies.services import ServiceServiceDep
+from backend.schemas.services import ServiceRead
 
 router = APIRouter(
     prefix="/services",

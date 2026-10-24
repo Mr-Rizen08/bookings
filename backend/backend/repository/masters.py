@@ -2,8 +2,8 @@ from uuid import UUID
 
 from sqlalchemy import select
 
-from models import Master
-from repository.base import BaseRepository
+from backend.models import Master
+from backend.repository.base import BaseRepository
 
 
 class MasterRepository(BaseRepository):

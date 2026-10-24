@@ -2,10 +2,8 @@ from uuid import UUID
 
 from fastapi import APIRouter
 from starlette import status
-
-from dependencies.masters import MasterServiceDep
-from models import Master
-from schemas.masters import MasterRead
+from backend.dependencies.masters import MasterServiceDep
+from backend.schemas.masters import MasterRead
 
 router = APIRouter(
     prefix="/masters",

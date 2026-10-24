@@ -2,7 +2,6 @@ import hashlib
 import secrets
 from datetime import datetime, timedelta
 from uuid import UUID
-
 from jose import jwt
 from passlib.handlers.argon2 import argon2
 from password_validator import PasswordValidator
@@ -36,8 +35,6 @@ def encode_access_token(user_id: UUID) -> str:
 
 def decode_refresh_token(token: str) -> UUID:
     pass
-
-
 
 
 #Refresh
