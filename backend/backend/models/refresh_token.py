@@ -16,4 +16,4 @@ class RefreshToken(IdMixin, Base):
     expires_at: Mapped[datetime]
     revoked_at: Mapped[datetime | None]
 
-    user: Mapped["User"] = relationship(back_populates="refresh_token")
+    user: Mapped["User"] = relationship(back_populates="refresh_tokens")

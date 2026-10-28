@@ -10,9 +10,9 @@ class RegisterUser(BaseModel):
     full_name: str = Field(max_length=320)
     phone: str | None = Field(default=None, max_length=20)
 
-    @field_validator("email")
+    @field_validator("phone")
     @classmethod
-    def validate_email(cls, v:str):
+    def validate_phone(cls, v:str):
         try:
             parsed = pn.parse(v, None)
         except NumberParseException:

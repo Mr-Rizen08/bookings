@@ -41,8 +41,6 @@ class AuthService:
         )
         await self.user_repo.create(user)
         await self.session.commit()
-        await self.session.refresh(user)
-
         return user
 
 
@@ -106,7 +104,7 @@ class AuthService:
         token, token_hash = generate_refresh_token()
 
         refresh_token = RefreshToken(
-            user_id=refresh_token,
+            user_id=refresh_token.user_id,
             token_hash=token_hash,
             expires_at=datetime.now(tz=timezone.utc) + timedelta(days=30)
         )

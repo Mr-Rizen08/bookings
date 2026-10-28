@@ -3,7 +3,7 @@ from enum import Enum
 from datetime import datetime
 
 from sqlalchemy import String, BigInteger, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.models.base import Base
 from backend.models.mixins import IdMixin
@@ -18,7 +18,7 @@ class User(IdMixin ,Base):
     __tablename__ = 'users'
 
     email: Mapped[str] = mapped_column(String(320), unique=True, nullable=False)
-    password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
+    password_hash: Mapped[str] = mapped_column(String(512), nullable=False)
     full_name: Mapped[str] = mapped_column(String(320), nullable=False)
     phone: Mapped[str | None] = mapped_column(String(20), nullable=True)
     role: Mapped[str] = mapped_column(String(20), default=UserRoleEnum.client)
@@ -26,5 +26,6 @@ class User(IdMixin ,Base):
     is_active: Mapped[bool] = mapped_column(default=True)
     updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())
 
+    refresh_tokens : Mapped[list['RefreshToken']] = relationship(back_populates="user")
 
 
