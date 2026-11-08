@@ -3,7 +3,7 @@ from starlette import status
 
 from backend.dependencies.auth import AuthServiceDep
 from backend.schemas.auth import RegisterUser, LoginUser, TokenResponse, TokenSchema
-from schemas.users import UsersRead
+from schemas.users import UserRead
 
 router = APIRouter(
     prefix="/auth",
@@ -27,7 +27,7 @@ async def login(
     "/register",
     summary="Регистрация",
     status_code=status.HTTP_201_CREATED,
-    response_model=UsersRead,
+    response_model=UserRead,
 )
 async def register(
         body: RegisterUser,

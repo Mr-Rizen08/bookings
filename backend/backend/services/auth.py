@@ -3,7 +3,6 @@ from datetime import datetime, timezone, timedelta
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
-
 from backend.core.secutiry import hash_password, verify_password, encode_access_token, generate_refresh_token, \
     hash_refresh_token
 from backend.models import User, RefreshToken

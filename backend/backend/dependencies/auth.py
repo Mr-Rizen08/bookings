@@ -1,15 +1,14 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException
 from starlette import status
-
 from backend.dependencies.db import SessionDep
 from backend.dependencies.user import UserRepoDep
 from backend.repository.refresh_token import RefreshTokenRepository
 from backend.services.auth import AuthService
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
-from core.secutiry import  decode_access_token
+from core.secutiry import decode_access_token
 from models import User
+from models.user import UserRoleEnum
 
 oauth2_bearer = HTTPBearer()
 
@@ -61,3 +60,12 @@ CurrentUserDep = Annotated[
     User,
     Depends(get_current_user)
 ]
+
+async def check_for_admin(
+        user: CurrentUserDep,
+) -> None:
+    if user.role != UserRoleEnum.admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Permission Denied",
+        )

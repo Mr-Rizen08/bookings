@@ -2,7 +2,6 @@ import hashlib
 import secrets
 from datetime import datetime, timedelta
 from uuid import UUID
-
 from fastapi import HTTPException
 from jose import jwt, JWTError
 from argon2 import PasswordHasher

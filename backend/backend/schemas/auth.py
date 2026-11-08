@@ -12,7 +12,9 @@ class RegisterUser(BaseModel):
 
     @field_validator("phone")
     @classmethod
-    def validate_phone(cls, v:str):
+    def validate_phone(cls, v:str | None):
+        if v is None:
+            return None
         try:
             parsed = pn.parse(v, None)
         except NumberParseException:
