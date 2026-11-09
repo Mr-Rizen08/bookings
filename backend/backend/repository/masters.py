@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from backend.models import Master
 from backend.repository.base import BaseRepository
@@ -12,11 +13,11 @@ class MasterRepository(BaseRepository):
         await self.session.flush()
 
     async def get_by_id(self, master_id: UUID) -> Master | None:
-        stmt = select(Master).where(Master.id == master_id)
+        stmt = select(Master).options(selectinload(Master.services)).where(Master.id == master_id)
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
     async def list(self):
-        stmt = select(Master)
+        stmt = select(Master).options(selectinload(Master.services))
         result = await self.session.execute(stmt)
         return result.scalars().all()

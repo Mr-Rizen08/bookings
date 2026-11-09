@@ -1,5 +1,6 @@
 import hashlib
 import secrets
+import string
 from datetime import datetime, timedelta
 from uuid import UUID
 from fastapi import HTTPException
@@ -62,3 +63,32 @@ def generate_refresh_token():
     token = secrets.token_urlsafe(32)
     hashed_token = hash_refresh_token(token)
     return token, hashed_token
+
+
+def generate_strong_password(length=12):
+    if length < 4:
+        raise ValueError("Длина пароля должна быть не менее 4 символов, чтобы вместить все категории.")
+
+    # Определяем наборы символов
+    lowercase = string.ascii_lowercase # a-z
+    uppercase = string.ascii_uppercase # A-Z
+    digits = string.digits
+    punctuation = string.punctuation
+
+    # Гарантируем наличие обязательных символов
+    password_chars = [
+        secrets.choice(lowercase),
+        secrets.choice(uppercase),
+        secrets.choice(digits),
+        secrets.choice(punctuation)
+    ]
+
+    # Заполняем оставшуюся длину случайными символами из всех доступных категорий
+    all_characters = lowercase + uppercase + digits + punctuation
+    for _ in range(length - 4):
+        password_chars.append(secrets.choice(all_characters))
+
+    # Перемешиваем символы, чтобы обязательные не всегда шли в начале
+    secrets.SystemRandom().shuffle(password_chars)
+
+    return ''.join(password_chars)

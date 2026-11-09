@@ -15,4 +15,9 @@ class Master(IdMixin, Base):
     bio : Mapped[str] = mapped_column(nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
+    services: Mapped[list["Service"]] = relationship(
+        secondary="master_services",
+        back_populates="masters",
+    )
+
     # user: Mapped["User"] = relationship(backref="")

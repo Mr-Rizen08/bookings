@@ -16,7 +16,7 @@ class RegisterUser(BaseModel):
         if v is None:
             return None
         try:
-            parsed = pn.parse(v, None)
+            pn.parse(v, None)
         except NumberParseException:
             pass
         if any(c.isalpha() for c in  v):

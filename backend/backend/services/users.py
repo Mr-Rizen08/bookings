@@ -53,4 +53,20 @@ class UserService:
         users = await self.user_repo.list_paginated(filters, pagination)
         return users
 
+    async def activate(self, user_id: UUID) -> None:
+        user = await self.user_repo.get_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        user.is_active = True
 
+        await self.session.commit()
+
+
+    async def deactivate(self, user_id: UUID) -> None:
+        user = await self.user_repo.get_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        user.is_active = False
+
+        await self.session.commit()

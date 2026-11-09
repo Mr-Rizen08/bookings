@@ -1,6 +1,6 @@
 from decimal import Decimal
 from sqlalchemy import String, CheckConstraint, NUMERIC, Boolean, Table, ForeignKey, Column, Uuid
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from backend.models.base import Base
 from backend.models.mixins import IdMixin
 
@@ -18,6 +18,10 @@ class Service(IdMixin, Base):
     price: Mapped[Decimal] = mapped_column(NUMERIC(12, 2), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
+    master: Mapped[list["Master"]] = relationship(
+        secondary="master_services",
+        back_populates="services",
+    )
 
 master_service = Table(
     "master_services",

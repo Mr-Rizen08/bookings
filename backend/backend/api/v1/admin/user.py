@@ -25,16 +25,24 @@ async def get_users(
 @router.post(
     "/{user_id}/active"
 )
-async def activate_user(user_id: UUID):
-    pass
+async def activate_user(user_id: UUID,
+                        service: UserServiceDep):
+
+    await service.activate(user_id)
+
 
 @router.post(
     "/{user_id}/deactive"
 )
-async def deactivate_user(user_id: UUID):
-    pass
+async def deactivate_user(user_id: UUID,
+                          service: UserServiceDep):
+    await service.deactivate(user_id)
 
 
 @router.get("/{user_id}")
-async def get_user(user_id: UUID):
-    pass
+async def get_user(
+        user_id: UUID,
+        service: UserServiceDep):
+    user = await service.get_by_id(user_id)
+    return user
+
