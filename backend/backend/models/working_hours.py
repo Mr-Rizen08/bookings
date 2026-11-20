@@ -2,7 +2,7 @@ from datetime import datetime, time
 from enum import Enum
 from uuid import UUID
 
-from sqlalchemy import ForeignKey, SMALLINT, CheckConstraint, String
+from sqlalchemy import ForeignKey, SMALLINT, CheckConstraint, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.models.base import Base
@@ -22,12 +22,14 @@ class WorkingHours(IdMixin, Base):
     __table_args__ = (
         CheckConstraint("weekday BETWEEN 1 AND 7", name="ck_weekday"),
         CheckConstraint("end_time > start_time", name="ck_end_time"),
+        UniqueConstraint("weekday", "master_id", "start_time", name="uq_working_hours_weekday_start_time"),
     )
     master_id: Mapped[UUID] = mapped_column(ForeignKey("masters.id", ondelete="CASCADE"),nullable=False)
     weekday: Mapped[int] = mapped_column(SMALLINT, nullable=False)
     start_time: Mapped[datetime] = mapped_column(nullable=False)
     end_time: Mapped[datetime] = mapped_column(nullable=False)
 
+#{weekday, start_time, end_time}
 
 class TimeOff(IdMixin, Base):
     __tablename__ = "time_offs"

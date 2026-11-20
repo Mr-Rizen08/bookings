@@ -28,9 +28,9 @@ class MasterServiceUpdate(BaseModel):
 
 
 class MasterUpdate(BaseModel):
-    display_name: str = Field(max_length=100)
+    display_name: str | None = Field(max_length=100)
     phone: str | None = Field(default=None, max_length=20)
-    bio: str
+    bio: str | None
 
     @field_validator("phone")
     @classmethod

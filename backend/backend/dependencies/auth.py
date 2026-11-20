@@ -7,6 +7,7 @@ from backend.repository.refresh_token import RefreshTokenRepository
 from backend.services.auth import AuthService
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from core.secutiry import decode_access_token
+from dependencies.masters import MasterDep
 from models import User
 from models.user import UserRoleEnum
 
@@ -69,3 +70,21 @@ async def check_for_admin(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Permission Denied",
         )
+
+async def get_current_master(
+        user: CurrentUserDep,
+        master_repo: MasterDep,
+) -> User:
+    if user.role == UserRoleEnum.master:
+        master = await master_repo.get_by_id(user.id)
+        if not master:
+            return user
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Permission Denied",
+    )
+
+CurrentMasterDep = Annotated[
+    User,
+    Depends(get_current_master),
+]

@@ -99,7 +99,7 @@ class MasterService:
         return masters
 
 
-    async def update(
+    async def master_update(
             self,
             master_id: UUID,
             body: MasterUpdate
