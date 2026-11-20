@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter
 
 from dependencies.masters import MasterServiceDep
-from schemas.masters import MasterCreate, MasterRead, MasterServiceUpdate
+from schemas.masters import MasterCreate, MasterRead, MasterServiceUpdate, MasterUpdate
 
 router = APIRouter(
     prefix="/master",
@@ -35,6 +35,8 @@ async def update_master_services(
 @router.patch("/{master_id}")
 async def update_master(
         master_id: UUID,
+        body: MasterUpdate,
+        service: MasterServiceDep
 ):
-    ...
+    await service.update(master_id, body)
 

@@ -1,16 +1,14 @@
 from uuid import UUID
-
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
-
 from backend.models import Master
 from backend.repository.masters import MasterRepository
 from core.secutiry import generate_strong_password, hash_password
 from models.user import UserRoleEnum, User
 from repository.service import ServiceRepository
 from repository.user import UserRepository
-from schemas.masters import MasterCreate, MasterServiceUpdate
+from schemas.masters import MasterCreate, MasterServiceUpdate, MasterUpdate
 
 
 class MasterService:
@@ -61,7 +59,6 @@ class MasterService:
 
         # отправка по почте
 
-
         return master
 
     async def  get_master_by_id(
@@ -101,3 +98,22 @@ class MasterService:
         masters = await self.master_repo.list()
         return masters
 
+
+    async def update(
+            self,
+            master_id: UUID,
+            body: MasterUpdate
+    ):
+
+        master = await self.master_repo.get_by_id(master_id)
+        if not master:
+            raise HTTPException(
+                status_code=404,
+                detail="Master not found"
+            )
+        data = body.model_dump(exclude_none=True)
+
+        for key, value in data.items():
+            setattr(master, key, value)
+
+        await self.session.commit()
