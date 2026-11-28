@@ -1,8 +1,10 @@
 from fastapi import APIRouter
 
-from dependencies.auth import CurrentUserDep, CurrentMasterDep
+from dependencies.auth import CurrentMasterDep
 from dependencies.masters import MasterServiceDep
 from schemas.masters import MasterUpdate
+from schemas.working_schema import WorkingHoursSchema
+from services.working_hours import WorkingHoursService
 
 router = APIRouter(
     prefix="/masters",
@@ -30,25 +32,32 @@ async def complete_booking():
 
 
 @router.get(
-    "me/working-hours"
+    "/me/working-hours",
+    response_model=WorkingHoursSchema
 )
-async def get_working_hours():
-    pass
-
+async def get_working_hours(
+        master: CurrentMasterDep,
+        service: WorkingHoursService
+):
+    return service.get_master_working_hours(master.id)
 
 
 
 @router.patch(
-    "me/working-hours"
+    "/me/working-hours"
 )
-async def update_working_hours():
-    pass
+async def update_working_hours(
+        master: CurrentMasterDep,
+        body: WorkingHoursSchema,
+        service: WorkingHoursService
+):
+    await service.update_working_hours(master.id, body)
 
 
 
 
 @router.get(
-    "me/time-off"
+    "/me/time-off"
 )
 async def get_time_off():
     pass
