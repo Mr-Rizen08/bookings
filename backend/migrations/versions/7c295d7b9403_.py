@@ -1,8 +1,8 @@
-"""Initial
+"""empty message
 
-Revision ID: 9c0f2e067657
+Revision ID: 7c295d7b9403
 Revises: 
-Create Date: 2026-10-14 17:58:32.831866
+Create Date: 2026-11-28 21:33:04.068568
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '9c0f2e067657'
+revision: str = '7c295d7b9403'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -35,7 +35,7 @@ def upgrade() -> None:
     )
     op.create_table('users',
     sa.Column('email', sa.String(length=320), nullable=False),
-    sa.Column('password_hash', sa.String(length=255), nullable=False),
+    sa.Column('password_hash', sa.String(length=512), nullable=False),
     sa.Column('full_name', sa.String(length=320), nullable=False),
     sa.Column('phone', sa.String(length=20), nullable=True),
     sa.Column('role', sa.String(length=20), nullable=False),
@@ -68,7 +68,7 @@ def upgrade() -> None:
     sa.Column('user_id', sa.Uuid(), nullable=False),
     sa.Column('token_hash', sa.String(length=64), nullable=False),
     sa.Column('expires_at', sa.DateTime(timezone=True), nullable=False),
-    sa.Column('revoked_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('revoked_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('id', sa.Uuid(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
@@ -97,8 +97,8 @@ def upgrade() -> None:
     )
     op.create_table('time_offs',
     sa.Column('master_id', sa.Uuid(), nullable=False),
-    sa.Column('starts_at', sa.Time(), nullable=False),
-    sa.Column('ends_at', sa.Time(), nullable=False),
+    sa.Column('starts_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('ends_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('reason', sa.String(length=200), nullable=True),
     sa.Column('id', sa.Uuid(), nullable=False),
     sa.CheckConstraint('ends_at > starts_at', name='ck_ends_at'),
@@ -108,13 +108,14 @@ def upgrade() -> None:
     op.create_table('working_hours',
     sa.Column('master_id', sa.Uuid(), nullable=False),
     sa.Column('weekday', sa.SMALLINT(), nullable=False),
-    sa.Column('start_time', sa.DateTime(timezone=True), nullable=False),
-    sa.Column('end_time', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('start_time', sa.Time(), nullable=False),
+    sa.Column('end_time', sa.Time(), nullable=False),
     sa.Column('id', sa.Uuid(), nullable=False),
     sa.CheckConstraint('end_time > start_time', name='ck_end_time'),
     sa.CheckConstraint('weekday BETWEEN 1 AND 7', name='ck_weekday'),
     sa.ForeignKeyConstraint(['master_id'], ['masters.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('weekday', 'master_id', 'start_time', name='uq_working_hours_weekday_start_time')
     )
     # ### end Alembic commands ###
 

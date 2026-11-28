@@ -5,7 +5,7 @@ from starlette import status
 
 from models import TimeOff
 from repository.time_off import TimeOffRepository
-from schemas.time_off import TimeOffSchema
+from schemas.time_off import TimeOffSchema, TimeOffFilter
 
 
 class TimeOffService:
@@ -15,29 +15,27 @@ class TimeOffService:
 
     async def get_time_off_by_id(
             self,
-            master_id: UUID
+            master_id: UUID,
+            filters: TimeOffFilter
     ):
-        time_off = await self.service_repo.get_by_id(master_id)
-        if not time_off:
-            raise HTTPException(
-                status_code=404,
-                detail="TimeOff not found"
-            )
-        return time_off
+        time_offs = await self.service_repo.list_by_master(
+            master_id=master_id, filters=filters)
+        return time_offs
 
 
     async def remove_time_off(
             self,
             master_id: UUID,
+            time_off_id: UUID
     ):
-        service = await self.service_repo.get_by_id(master_id)
-        if not service:
+        service = await self.service_repo.get_by_id(time_off_id)
+        if not service or service.master_id != master_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="TimeOff not found"
             )
         await self.service_repo.remove(master_id)
-
+        await self.session.commit()
 
 
     async def create_time_off(
@@ -45,13 +43,8 @@ class TimeOffService:
             body: TimeOffSchema,
             master_id: UUID
     ):
-        exists_service = await self.service_repo.get_by_id(master_id)
-        if exists_service:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail="TimeOff already exists"
-            )
         time_off = TimeOff(
+            master_id=master_id,
             start_time=body.start_time,
             end_time=body.end_time,
             reason=body.reason,
@@ -60,6 +53,4 @@ class TimeOffService:
         await self.session.commit()
         return time_off
 
-    async def update_time_off(
-            self,
-    ):
+

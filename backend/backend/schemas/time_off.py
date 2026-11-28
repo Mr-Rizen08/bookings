@@ -1,10 +1,18 @@
+from uuid import UUID
+
+from fastapi import Query
 from pydantic import BaseModel
-from datetime import time
+from datetime import datetime
+
+class TimeOffFilter(BaseModel):
+    from_at: datetime | None = Query(default=None, alias="from")
+    to_at: datetime | None = Query(default=None, alias="to")
 
 class TimeOffSchema(BaseModel):
-    start_time: time
-    end_time: time
+    start_time: datetime
+    end_time: datetime
     reason: str | None
 
-class ListTimeOffSchema(BaseModel):
-    items: list[TimeOffSchema]
+class TimeOffRead(TimeOffSchema):
+    id: UUID
+

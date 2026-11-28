@@ -4,6 +4,7 @@ from sqlalchemy import select
 
 from models import TimeOff
 from repository.base import BaseRepository
+from schemas.time_off import TimeOffFilter
 
 
 class TimeOffRepository(
@@ -13,8 +14,18 @@ class TimeOffRepository(
         self.session.add(time_off)
         await self.session.flush()
 
-    async def list(self):
-        pass
+    async def list_by_master(self, master_id: UUID, filters: TimeOffFilter):
+
+        stmt = select(TimeOff).where(TimeOff.master_id == master_id)
+
+        if filters.from_at:
+            stmt = stmt.where(TimeOff.starts_at > filters.from_at)
+        if filters.to_at:
+            stmt = stmt.where(TimeOff.starts_at < filters.to_at)
+
+        result = await self.session.execute(stmt)
+        return result.scalars().all()
+
 
     async def remove(self, time_off_id: UUID):
         await self.session.delete(time_off_id)

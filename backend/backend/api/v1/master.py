@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from dependencies.auth import CurrentMasterDep
 from dependencies.masters import MasterServiceDep
 from schemas.masters import MasterUpdate
+from schemas.time_off import TimeOffRead
 from schemas.working_schema import WorkingHoursSchema
 from services.working_hours import WorkingHoursService
 
@@ -39,7 +40,7 @@ async def get_working_hours(
         master: CurrentMasterDep,
         service: WorkingHoursService
 ):
-    return service.get_master_working_hours(master.id)
+    return await service.get_master_working_hours(master.id)
 
 
 
@@ -57,7 +58,8 @@ async def update_working_hours(
 
 
 @router.get(
-    "/me/time-off"
+    "/me/time-off",
+    response_model=list[TimeOffRead]
 )
 async def get_time_off():
     pass

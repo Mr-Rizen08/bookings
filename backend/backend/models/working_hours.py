@@ -26,8 +26,8 @@ class WorkingHours(IdMixin, Base):
     )
     master_id: Mapped[UUID] = mapped_column(ForeignKey("masters.id", ondelete="CASCADE"),nullable=False)
     weekday: Mapped[int] = mapped_column(SMALLINT, nullable=False)
-    start_time: Mapped[datetime] = mapped_column(nullable=False)
-    end_time: Mapped[datetime] = mapped_column(nullable=False)
+    start_time: Mapped[time] = mapped_column(nullable=False)
+    end_time: Mapped[time] = mapped_column(nullable=False)
 
 #{weekday, start_time, end_time}
 
@@ -37,7 +37,7 @@ class TimeOff(IdMixin, Base):
         CheckConstraint("ends_at > starts_at", name="ck_ends_at"),
     )
     master_id: Mapped[UUID] = mapped_column(ForeignKey("masters.id", ondelete="CASCADE"), nullable=False)
-    starts_at: Mapped[time] = mapped_column(nullable=False)
-    ends_at: Mapped[time] = mapped_column(nullable=False)
+    starts_at: Mapped[datetime] = mapped_column(nullable=False)
+    ends_at: Mapped[datetime] = mapped_column(nullable=False)
     reason : Mapped[str] = mapped_column(String(200), nullable=True)
 
